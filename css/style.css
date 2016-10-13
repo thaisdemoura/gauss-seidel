@@ -2,25 +2,25 @@ body {
 	font: 400 13px/1 'Open Sans', sans-serif;
 }
 
-.it-table {
+.tabela-iteracoes {
 	display: flex;
 	flex-wrap: wrap;
 	margin: 0;
 	padding: 20px;
 }
 
-.it-table {
+.tabela-iteracoes {
 	margin-bottom: 30px;
 	flex: 0 0 100%;
 }
 
-.it-table table {
+.tabela-iteracoes table {
 	border: 1px solid #ccc;
 	margin: 0 auto 0;
 	width: 500px;
 }
 
-.it-table th {
+.tabela-iteracoes th {
 	border: 1px solid white;
 	background-color: black;
 	color: white;
@@ -28,7 +28,7 @@ body {
 	line-height: 25px;
 }
 
-.it-table td {
+.tabela-iteracoes td {
 	border: 1px solid #ccc;
 	font-size: 13px;
 	line-height: 25px;
