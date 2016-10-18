@@ -14,14 +14,14 @@
 
 var deltaSeidel = 100, //Gambeta
     precisao    = 0.05,
-    iSeidel     = math.matrix(), //Tabela de iterações.
+    iSeidel     = math.matrix(),
     original    = math.matrix(),
     matriz      = math.matrix(),
     auxiliar    = [],
     beta        = [],
     tentativa,
     recomecar = false,
-    eqA, eqB, eqC, //Equações com variáveis isoladas.
+    eqA, eqB, eqC,
     linha, coluna,
     html = '',
     $tabela = $('.tabela-seidel tbody');
@@ -33,8 +33,8 @@ $(document).on('ready', function(){
 
 function copiaOriginal() {
   //Definição da matriz original.
-  original[0] = [1, 3, 1, 2];
-  original[1] = [5, 2, 2, 3];
+  original[0] = [5, 2, 2, 3];
+  original[1] = [1, 3, 1, 2];
   original[2] = [0, 6, 8, -6];
 
   // original[0] = [3, 1, 1, 2];
@@ -42,7 +42,7 @@ function copiaOriginal() {
   // original[2] = [6, 0, 8, -6];
 
   //Matriz copia a original para poder realizar alterações.
-  for(i = 0; i < 3; i++) { matriz[i] = original[i].slice(0, 4); }
+  for(var i = 0; i < 3; i++) { matriz[i] = original[i].slice(0, 4); }
 }
 
 function printaVetor(teste) {
@@ -52,8 +52,8 @@ function printaVetor(teste) {
 }
 
 function printaMatriz(teste) {
-  for(linha = 0; linha < 3; linha++) {
-    for(coluna = 0; coluna < 4; coluna++) {
+  for(var linha = 0; linha < 3; linha++) {
+    for(var coluna = 0; coluna < 4; coluna++) {
       console.log(teste[linha][coluna]);
     }
     console.log('---');
@@ -61,22 +61,21 @@ function printaMatriz(teste) {
 }
 
 function testeConvergencia() {
-
   copiaOriginal();
   printaMatriz(matriz);
 
   //Zera beta.
-  for(i = 0; i < 3; i++) { beta[i] = 0; }
+  for(var i = 0; i < 3; i++) { beta[i] = 0; }
 
   tentativa = 1;
 
   for(linha = 0; linha < 3; linha++) {
     //Se a matriz tiver sido modificada, o processo recomeça.
-    if(recomecar) { linha = 0; }
+    if(recomecar) { linha = 0; for(var i = 0; i < 3; i++) { beta[i] = 0; } }
     recomecar = false;
 
     //Cálculo de beta da linha em questão.
-    for(coluna = 0; coluna < 3; coluna++) {
+    for(var coluna = 0; coluna < 3; coluna++) {
       if(coluna < linha) {
         beta[linha] += Math.abs(matriz[linha][coluna] * beta[coluna]);
       } else if (coluna > linha) {
@@ -84,18 +83,26 @@ function testeConvergencia() {
       }
     }
 
-    beta[linha] /= Math.abs(matriz[linha][linha]);
 
+    if(Math.abs(matriz[linha][linha]) != 0) {
+      beta[linha] /= Math.abs(matriz[linha][linha]);
+    }
+    
+    console.log("linha -> " + linha)
+    console.log("beta -> " + beta);
     if(beta[linha] >= 1) {
+      // console.log('Beta >= 1');
       // console.log(beta);
 
-      console.log('Tentativa: ' + tentativa);
+      // console.log('Tentativa: ' + tentativa);
 
       if(tentativa == 1) {
         auxiliar  = matriz[0].slice(0, 4);
         matriz[0] = matriz[1].slice(0, 4);
         matriz[1] = auxiliar.slice(0, 4);
       } else if(tentativa == 2) {
+
+        // console.log('2');
         copiaOriginal();
 
         auxiliar  = matriz[0].slice(0, 4);
@@ -110,20 +117,19 @@ function testeConvergencia() {
       }else if(tentativa == 4) {
         copiaOriginal();
 
-        for(i = 0; i < 3; i++) {
+        for(var i = 0; i < 3; i++) {
           matriz[i] = (matriz[i].slice(0, 2).reverse()).concat(matriz[i].slice(2, 4));
         }
+        console.log("oi");
       } else if(tentativa == 5) {
         break; //Gambiarra pra não explodir o browser. Tira.
       }
-
-      printaMatriz(matriz);
-
       recomecar = true;
       tentativa++;
-      console.log(beta);
+    } else {
     }
   }
+  printaMatriz(matriz);
 }
 
 function gaussSeidel() {
